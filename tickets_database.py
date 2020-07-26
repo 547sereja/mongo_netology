@@ -41,12 +41,14 @@ def find_by_name(name, db):
     Найти билеты по имени исполнителя (в том числе – по подстроке, например "Seconds to"),
     и вернуть их по возрастанию цены
     """
-
-    regex = re.compile('укажите регулярное выражение для поиска. ' \
-                       'Обратите внимание, что в строке могут быть специальные символы, их нужно экранировать')
-
+    mongo_db = client[db]
+    tickets_collection = mongo_db['tickets']
+    regex = re.compile(name)
+    sorted_list = tickets_collection.find({'Исполнитель': regex}).sort('Цена', pymongo.ASKENDING)
+    print(sorted_list)
 
 if __name__ == '__main__':
     client = MongoClient()
     read_data('artists.csv', 'tickets_db')
     find_cheapest('tickets_db')
+    find_by_name('Seconds to', 'tickets_db')

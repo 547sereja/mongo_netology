@@ -9,8 +9,8 @@ def read_data(csv_file, db):
     """
     Загрузить данные в бд из CSV-файла
     """
-    mongo_bd = client[db]
-    tickets_collection = mongo_bd['tickets']
+    mongo_db = client[db]
+    tickets_collection = mongo_db['tickets']
 
     with open(csv_file, encoding='utf8') as csvfile:
         # прочитать файл с данными и записать в коллекцию
@@ -46,3 +46,4 @@ def find_by_name(name, db):
 if __name__ == '__main__':
     client = MongoClient()
     read_data('artists.csv', 'tickets_db')
+    print(mongo_db)

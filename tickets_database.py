@@ -5,7 +5,6 @@ from pymongo import MongoClient
 import pymongo
 
 
-
 def read_data(csv_file, db):
     """
     Загрузить данные в бд из CSV-файла
@@ -18,7 +17,6 @@ def read_data(csv_file, db):
         row_list = []
         reader = csv.DictReader(csvfile)
         for row in reader:
-            row = dict(row)
             row['Цена'] = int(row['Цена'])
             row_list.append(row)
         tickets_collection.insert_many(row_list)
@@ -32,7 +30,7 @@ def find_cheapest(db):
     """
     mongo_db = client[db]
     tickets_collection = mongo_db['tickets']
-    sorted_list = tickets_collection.find().sort('Цена', pymongo.ASKENDING)
+    sorted_list = list(tickets_collection.find().sort('Цена', pymongo.ASCENDING))
     print(sorted_list)
 
 
@@ -44,8 +42,9 @@ def find_by_name(name, db):
     mongo_db = client[db]
     tickets_collection = mongo_db['tickets']
     regex = re.compile(name)
-    sorted_list = tickets_collection.find({'Исполнитель': regex}).sort('Цена', pymongo.ASKENDING)
+    sorted_list = list(tickets_collection.find({'Исполнитель': regex}).sort('Цена', pymongo.ASCENDING))
     print(sorted_list)
+
 
 if __name__ == '__main__':
     client = MongoClient()
